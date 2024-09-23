@@ -1,10 +1,10 @@
 import numpy as np
 
-# Definir constantes
-SIMULATION_TIME = 360000 
-LAMBDA = 40  # Tasa de llegada de solicitudes (Poisson): 40 solicitudes por segundo
-SERVICE_RATE_PROVIDER1 = 100  # Tasa de servicio para Mountain Mega Computing (solicitudes/segundo)
-SERVICE_RATE_PROVIDER2 = 10  # Tasa de servicio por servidor para Pizzita Computing (solicitudes/segundo)
+# Constantes
+SIMULATION_TIME = 3600 
+LAMBDA = 40
+SERVICE_RATE_PROVIDER1 = 100
+SERVICE_RATE_PROVIDER2 = 10
 
 # Función para generar llegadas según proceso de Poisson
 def generate_arrivals(lambd, time):
@@ -96,6 +96,15 @@ def simulate_multiple_servers(lambd, mu, sim_time, server_capacity):
         "Momento de la última salida": last_departure
     }
 
+# Búsqueda empírica del número mínimo de servidores necesarios
+def find_min_servers(lambd, mu, sim_time):
+    num_servers = 1
+    while True:
+        total_queue_time = simulate_multiple_servers(lambd, mu, sim_time, num_servers)["Tiempo total en cola"]
+        if total_queue_time == 0:
+            return num_servers
+        num_servers += 1
+
 # Simulación para Proveedor 1 (Mountain Mega Computing)
 result_provider1 = simulate_single_server(LAMBDA, SERVICE_RATE_PROVIDER1, SIMULATION_TIME)
 print("Resultados de Mountain Mega Computing:")
@@ -103,8 +112,12 @@ for key, value in result_provider1.items():
     print(f"{key}: {value}")
 
 # Simulación para Proveedor 2 (Pizzita Computing), con capacidad dinámica de servidores
-num_servers = 10  # Se puede ajustar según el análisis
+num_servers = 10
 result_provider2 = simulate_multiple_servers(LAMBDA, SERVICE_RATE_PROVIDER2, SIMULATION_TIME, num_servers)
 print("\nResultados de Pizzita Computing:")
 for key, value in result_provider2.items():
     print(f"{key}: {value}")
+
+# Encontrar el número mínimo de servidores para Pizzita Computing
+min_servers = find_min_servers(LAMBDA, SERVICE_RATE_PROVIDER2, SIMULATION_TIME)
+print(f"\nNúmero mínimo de servidores necesarios en Pizzita Computing para evitar colas: {min_servers}")
