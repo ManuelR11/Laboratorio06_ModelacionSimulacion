@@ -1,8 +1,8 @@
 import numpy as np
 
 # Constantes
-SIMULATION_TIME = 3600 
-LAMBDA = 40
+SIMULATION_TIME = 36000
+LAMBDA = 100
 SERVICE_RATE_PROVIDER1 = 100
 SERVICE_RATE_PROVIDER2 = 10
 
@@ -107,17 +107,17 @@ def find_min_servers(lambd, mu, sim_time):
 
 # Simulación para Proveedor 1 (Mountain Mega Computing)
 result_provider1 = simulate_single_server(LAMBDA, SERVICE_RATE_PROVIDER1, SIMULATION_TIME)
-print("Resultados de Mountain Mega Computing:")
+print("Resultados de Mountain Mega Computing (6000 solicitudes por minuto):")
 for key, value in result_provider1.items():
     print(f"{key}: {value}")
 
 # Simulación para Proveedor 2 (Pizzita Computing), con capacidad dinámica de servidores
 num_servers = 10
 result_provider2 = simulate_multiple_servers(LAMBDA, SERVICE_RATE_PROVIDER2, SIMULATION_TIME, num_servers)
-print("\nResultados de Pizzita Computing:")
+print("\nResultados de Pizzita Computing (6000 solicitudes por minuto):")
 for key, value in result_provider2.items():
     print(f"{key}: {value}")
 
 # Encontrar el número mínimo de servidores para Pizzita Computing
 min_servers = find_min_servers(LAMBDA, SERVICE_RATE_PROVIDER2, SIMULATION_TIME)
-print(f"\nNúmero mínimo de servidores necesarios en Pizzita Computing para evitar colas: {min_servers}")
+print(f"\nNúmero mínimo de servidores necesarios en Pizzita Computing para evitar colas (6000 solicitudes por minuto): {min_servers}")
